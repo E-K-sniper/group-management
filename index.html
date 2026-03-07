@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Group Portal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            max-width: 90%;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button.login {
+            background: #007bff;
+            color: white;
+        }
+        
+        button.login:hover {
+            background: #0056b3;
+        }
+        
+        button.register {
+            background: #28a745;
+            color: white;
+        }
+        
+        button.register:hover {
+            background: #218838;
+        }
+        
+        #error-msg {
+            color: red;
+            font-size: 0.8rem;
+            text-align: center;
+            display: none;
+        }
+        
+        #groupSection {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        #success-msg {
+            color: green;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+            margin-top: 10px;
+        }
+        
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+        
+        th {
+            background: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <!-- Login Section -->
+        <div id="loginSection">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <p id="error-msg">Invalid username or password</p>
+            <button class="login" onclick="login()">Login</button>
+        </div>
+
+        <!-- Group Registration Section -->
+        <div id="groupSection">
+            <h2>Register Group</h2>
+            <input type="text" id="groupNum" placeholder="Group Number">
+            <input type="text" id="groupName" placeholder="Name">
+            <button class="register" onclick="registerData()">Register</button>
+            <p id="success-msg">Registration successful. Security enabled.</p>
+
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Group #</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if (user === "admin" && pass === "admin") {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('groupSection').style.display = 'block';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        function registerData() {
+            const num = document.getElementById('groupNum').value;
+            const name = document.getElementById('groupName').value;
+            const successMsg = document.getElementById('success-msg');
+
+            if (num && name) {
+                const table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+
+                newRow.innerHTML = `
+                    <td>${num}</td>
+                    <td>${name}</td>
+                `;
+
+                // Clear fields
+                document.getElementById('groupNum').value = '';
+                document.getElementById('groupName').value = '';
+
+                // Show success message briefly
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+
+</html>
