@@ -1,127 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Portal</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* --- Global Styles --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f2f5;
-            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 10px;
         }
-        
-        .card {
+
+        .container {
             background: white;
             padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            max-width: 90%;
-        }
-        
-        h2 {
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            color: #333;
         }
-        
+
+        .container.wide { max-width: 800px; width: 100%; }
+
+        h2 { margin-bottom: 1.5rem; color: #333; }
+
+        .form-group { margin-bottom: 1rem; text-align: left; }
+        label { display: block; margin-bottom: 0.5rem; color: #666; font-size: 0.9rem; }
+
         input {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        
+        input:focus { border-color: #4a90e2; outline: none; }
+
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 1rem;
             cursor: pointer;
-        }
-        
-        button.login {
-            background: #007bff;
-            color: white;
-        }
-        
-        button.login:hover {
-            background: #0056b3;
-        }
-        
-        button.register {
-            background: #28a745;
-            color: white;
-        }
-        
-        button.register:hover {
-            background: #218838;
-        }
-        
-        #error-msg {
-            color: red;
-            font-size: 0.8rem;
-            text-align: center;
-            display: none;
-        }
-        
-        #groupSection {
-            display: none;
-            margin-top: 20px;
-        }
-        
-        #success-msg {
-            color: green;
-            font-size: 0.9rem;
-            text-align: center;
-            display: none;
+            transition: background 0.3s;
             margin-top: 10px;
         }
-        
+        button:hover { background-color: #357abd; }
+
+        #error-msg { color: #e74c3c; font-size: 0.9rem; margin-top: 10px; display: none; }
+        #success-msg { color: green; font-size: 0.9rem; text-align: center; display: none; margin-top: 10px; }
+
+        /* --- Table Styles --- */
+        .table-wrapper { overflow-x: auto; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         table {
             width: 100%;
-            margin-top: 20px;
             border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 300px;
         }
-        
-        th,
-        td {
+        th, td {
             padding: 12px;
-            border: 1px solid #eee;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
-        
-        th {
-            background: #f4f4f4;
+        th { background-color: #f8f9fa; color: #333; }
+        tr:hover { background-color: #f1f1f1; }
+
+        .hidden { display: none; }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media screen and (max-width: 600px) {
+            body { align-items: flex-start; padding: 20px 0; }
+            .container, .container.wide { width: 100%; padding: 1.5rem; border-radius: 8px; }
+            h2 { font-size: 1.5rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 8px; }
         }
     </style>
 </head>
-
 <body>
-    <div class="card">
-        <!-- Login Section -->
-        <div id="loginSection">
-            <h2>Login</h2>
+
+    <!-- Login Container -->
+    <div class="container" id="loginSection">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="username">Username</label>
             <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <p id="error-msg">Invalid username or password</p>
-            <button class="login" onclick="login()">Login</button>
         </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <p id="error-msg">Invalid username or password</p>
+        <button onclick="login()">Login</button>
+    </div>
 
-        <!-- Group Registration Section -->
-        <div id="groupSection">
-            <h2>Register Group</h2>
-            <input type="text" id="groupNum" placeholder="Group Number">
-            <input type="text" id="groupName" placeholder="Name">
-            <button class="register" onclick="registerData()">Register</button>
-            <p id="success-msg">Registration successful. Security enabled.</p>
+    <!-- Group Registration Container -->
+    <div class="container wide hidden" id="groupSection">
+        <h2>Register Group</h2>
+        <form id="regForm">
+            <div class="form-group">
+                <label for="groupNum">Group Number</label>
+                <input type="text" id="groupNum" placeholder="e.g. G-01" required>
+            </div>
+            <div class="form-group">
+                <label for="groupName">Name</label>
+                <input type="text" id="groupName" placeholder="Enter Group Name" required>
+            </div>
+            <button type="submit">Register Data</button>
+        </form>
+        <p id="success-msg">Registration successful. Security enabled.</p>
 
+        <div class="table-wrapper">
             <table id="dataTable">
                 <thead>
                     <tr>
@@ -130,6 +133,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Data will appear here -->
                 </tbody>
             </table>
         </div>
@@ -139,40 +143,31 @@
         function login() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
-            if (user === "admin" && pass === "admin") {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('groupSection').style.display = 'block';
+            if(user === "admin" && pass === "admin") {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('groupSection').classList.remove('hidden');
             } else {
                 document.getElementById('error-msg').style.display = 'block';
             }
         }
 
-        function registerData() {
-            const num = document.getElementById('groupNum').value;
-            const name = document.getElementById('groupName').value;
-            const successMsg = document.getElementById('success-msg');
+        document.getElementById('regForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const groupNum = document.getElementById('groupNum').value;
+            const groupName = document.getElementById('groupName').value;
+            if(groupNum && groupName){
+                const tableBody = document.querySelector('#dataTable tbody');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `<td>${groupNum}</td><td>${groupName}</td>`;
+                tableBody.appendChild(newRow);
+                document.getElementById('regForm').reset();
 
-            if (num && name) {
-                const table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
-                const newRow = table.insertRow();
-
-                newRow.innerHTML = `
-                    <td>${num}</td>
-                    <td>${name}</td>
-                `;
-
-                // Clear fields
-                document.getElementById('groupNum').value = '';
-                document.getElementById('groupName').value = '';
-
-                // Show success message briefly
+                const successMsg = document.getElementById('success-msg');
                 successMsg.style.display = 'block';
-                setTimeout(() => {
-                    successMsg.style.display = 'none';
-                }, 3000);
+                setTimeout(()=>{ successMsg.style.display='none'; }, 3000);
             }
-        }
+        });
     </script>
-</body>
 
+</body>
 </html>
