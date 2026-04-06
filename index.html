@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         function login() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
@@ -167,7 +167,50 @@
                 setTimeout(()=>{ successMsg.style.display='none'; }, 3000);
             }
         });
-    </script>
+    </script> -->
+    <script>
+    function login() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if (user === "admin" && pass === "admin") {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('groupSection').classList.remove('hidden');
+        } else {
+            document.getElementById('error-msg').style.display = 'block';
+        }
+    }
+
+    // دالة تشفير Base64
+    function encryptText(text) {
+        return btoa(unescape(encodeURIComponent(text)));
+    }
+
+    document.getElementById('regForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const groupNum = document.getElementById('groupNum').value;
+        const groupName = document.getElementById('groupName').value;
+
+        if (groupNum && groupName) {
+            const encryptedGroupNum = encryptText(groupNum);
+            const encryptedGroupName = encryptText(groupName);
+
+            const tableBody = document.querySelector('#dataTable tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `<td>${encryptedGroupNum}</td><td>${encryptedGroupName}</td>`;
+            tableBody.appendChild(newRow);
+
+            document.getElementById('regForm').reset();
+
+            const successMsg = document.getElementById('success-msg');
+            successMsg.style.display = 'block';
+            successMsg.textContent = 'Registration successful. Data encrypted.';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+    });
+</script>
 
 </body>
 </html>
