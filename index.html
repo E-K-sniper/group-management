@@ -1,13 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Portal - Secured</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- Global Styles --- */
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .container.wide {
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #357abd;
+        }
+        
+        #error-msg {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        #success-msg {
+            color: green;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 300px;
+        }
+        
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="loginSection">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <p id="error-msg">Invalid credentials</p>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div class="container wide hidden" id="groupSection">
+        <h2>Register Group</h2>
+        <form id="regForm">
+            <div class="form-group">
+                <label for="groupNum">Group Number</label>
+                <input type="text" id="groupNum" placeholder="e.g. G-01" required>
+            </div>
+            <div class="form-group">
+                <label for="groupName">Name</label>
+                <input type="text" id="groupName" placeholder="Enter Group Name" required>
+            </div>
+            <button type="submit">Register Data</button>
+        </form>
+        <p id="success-msg">Registration successful.</p>
+
+        <div class="table-wrapper">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Group #</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Obfuscated credentials (Base64 for "admin")
+        const _u = "YWRtaW4=";
+        const _p = "YWRtaW4=";
+
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            // btoa() converts string to Base64
+            if (btoa(user) === _u && btoa(pass) === _p) {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('groupSection').classList.remove('hidden');
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const groupNum = document.getElementById('groupNum').value;
+            const groupName = document.getElementById('groupName').value;
+
+            if (groupNum && groupName) {
+                const tableBody = document.querySelector('#dataTable tbody');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `<td>${groupNum}</td><td>${groupName}</td>`;
+                tableBody.appendChild(newRow);
+                document.getElementById('regForm').reset();
+
+                const successMsg = document.getElementById('success-msg');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Portal</title>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* --- Global Styles --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Poppins', sans-serif;
@@ -81,7 +308,6 @@
 
         .hidden { display: none; }
 
-        /* --- RESPONSIVE DESIGN --- */
         @media screen and (max-width: 600px) {
             body { align-items: flex-start; padding: 20px 0; }
             .container, .container.wide { width: 100%; padding: 1.5rem; border-radius: 8px; }
@@ -93,7 +319,6 @@
 </head>
 <body>
 
-    <!-- Login Container -->
     <div class="container" id="loginSection">
         <h2>Login</h2>
         <div class="form-group">
@@ -108,7 +333,6 @@
         <button onclick="login()">Login</button>
     </div>
 
-    <!-- Group Registration Container -->
     <div class="container wide hidden" id="groupSection">
         <h2>Register Group</h2>
         <form id="regForm">
@@ -133,11 +357,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Data will appear here -->
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
 
     <!-- <script>
         function login() {
@@ -168,7 +391,7 @@
             }
         });
     </script> -->
-    <script>
+    <!-- <script>
     function login() {
         const user = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
@@ -213,4 +436,4 @@
 </script>
 
 </body>
-</html>
+</html> -->
